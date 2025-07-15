@@ -14,11 +14,11 @@
 namespace geometry {
 
 /*
- * В коде везде используется DummyClass. Ваша задача - удалить DummyClass и везде вместо него 
- использоватьь наиболее подходящий тип для решения задачи
+ * В коде везде используется ReplaceMe. Ваша задача - удалить ReplaceMe и везде вместо него
+ использовать наиболее подходящий тип для решения задачи
  */
-struct DummyClass {
-    DummyClass(std::vector<Shape>) {}
+struct ReplaceMe {
+    ReplaceMe(std::vector<Shape>) {}
 };
 
 /*
@@ -92,6 +92,19 @@ struct Line {
 
 struct Triangle {
     Point2D a, b, c;
+
+    //
+    // Обратите внимание! В методе Lines(), в отличие от Vertices(), координаты точек замыкаются на начало:
+    // a.x, b.x, c.x а затем идёт снова первая вершина a.x
+    //
+    // Это необходимо для правильного рисования фигур через gnuplot, который формирует линии используя пары точек.
+    // В случае с  Triangle будут составлены такие пары точек:
+    //      - { a, b }
+    //      - { b, c }
+    //      - { c, a }
+    //
+    std::array<Point2D, 3> Vertices() { return {a, b, c}; }
+    Lines2D<4> Lines() { return {{a.x, b.x, c.x, a.x}, {a.y, b.y, c.y, a.y}}; }
 
     /* ваш код здесь */
 };

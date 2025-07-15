@@ -63,13 +63,11 @@ private:
     std::uniform_int_distribution<int> type_dist;
 };
 
-std::vector<std::pair<Shape, Shape>> FindAllCollisions(DummyClass shapes) {
+std::vector<std::pair<Shape, Shape>> FindAllCollisions(ReplaceMe shapes) {
     std::vector<std::pair<Shape, Shape>> collisions;
 
     /*
-     * Используйте библиотеку ranges, чтобы найти все коллизии между фигурами
-     *
-     * Важно: использование ручной итерации по фигурам не разрешается
+     * Используйте библиотеку ranges, чтобы найти все коллизии между фигурами методом BoundingBoxesOverlap
      *
      * Также используйте наиболее эффективный метод добавления объектов в collisions
      */
@@ -77,7 +75,7 @@ std::vector<std::pair<Shape, Shape>> FindAllCollisions(DummyClass shapes) {
     return collisions;
 }
 
-std::optional<size_t> FindHighestShape(DummyClass shapes) {
+std::optional<size_t> FindHighestShape(ReplaceMe shapes) {
 
     /*
      * Используйте библиотеку ranges, чтобы найти самую высокую фигуру

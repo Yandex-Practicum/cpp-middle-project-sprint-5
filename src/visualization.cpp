@@ -64,7 +64,33 @@ void Draw(std::span<geometry::Shape> shapes) {
 }
 
 void Draw(std::span<const geometry::triangulation::DelaunayTriangle> triangles) {
-    // dаш код здесь
+    using namespace geometry;
+    using namespace matplot;
+
+    // Disable gnuplot warnings
+    auto f = figure(false);
+    f->backend()->run_command("unset warnings");
+    f->ioff();
+    f->size(900, 900);
+
+    hold(on);     // Multiple plots mode
+    axis(equal);  // Squre view
+    grid(on);     // Enable grid by default
+
+    for (const auto &[index, d_triangle] : std::ranges::views::enumerate(triangles)) {
+        const geometry::Triangle tri{d_triangle.a, d_triangle.b, d_triangle.c};
+        const auto lines = tri.Lines();
+        plot(lines.x, lines.y)->line_width(2).color("cyan");
+
+        // Add triangle number
+        const auto center = tri.Center();
+        auto t = text(center.x, center.y, std::to_string(index));
+        t->font_size(14);
+        t->color("black");
+    }
+
+    // Display plot
+    f->show();
 }
 
 }  // namespace geometry::visualization
