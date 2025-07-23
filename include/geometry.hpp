@@ -14,14 +14,6 @@
 namespace geometry {
 
 /*
- * В коде везде используется ReplaceMe. Ваша задача - удалить ReplaceMe и везде вместо него
- использовать наиболее подходящий тип для решения задачи
- */
-struct ReplaceMe {
-    ReplaceMe(std::vector<Shape>) {}
-};
-
-/*
  * Добавьте к методам класса Point2D и Lines2DDyn все необходимые аттрибуты и спецификаторы
  * Важно: Возвращаемый тип и принимаемые аргументы менять не нужно
  */
@@ -88,6 +80,10 @@ struct Line {
     Point2D start, end;
 
     /* ваш код здесь */
+
+    Point2D Center() { return {}; }
+    std::array<Point2D, 2> Vertices() { return {Point2D{start.x, start.y}, {end.x, end.y}}; }
+    Lines2D<2> Lines() const { return {{start.x, end.x}, {start.y, end.y}}; }
 };
 
 struct Triangle {
@@ -103,8 +99,9 @@ struct Triangle {
     //      - { b, c }
     //      - { c, a }
     //
+    Point2D Center() { return {}; }
     std::array<Point2D, 3> Vertices() { return {a, b, c}; }
-    Lines2D<4> Lines() { return {{a.x, b.x, c.x, a.x}, {a.y, b.y, c.y, a.y}}; }
+    Lines2D<4> Lines() const { return {{a.x, b.x, c.x, a.x}, {a.y, b.y, c.y, a.y}}; }
 
     /* ваш код здесь */
 };
@@ -114,6 +111,9 @@ struct Rectangle {
     double width, height;
 
     /* ваш код здесь */
+    Point2D Center() { return {}; }
+    std::array<Point2D, 1> Vertices() { return {}; }
+    Lines2D<1> Lines() const { return {}; }
 };
 
 struct RegularPolygon {
@@ -124,6 +124,7 @@ struct RegularPolygon {
     constexpr RegularPolygon(Point2D center, double radius, int sides)
         : center_p(center), radius(radius), sides(sides) {}
 
+    Point2D Center() { return {}; }
     std::vector<Point2D> Vertices() {
         std::vector<Point2D> points;
         points.reserve(sides);
@@ -134,6 +135,7 @@ struct RegularPolygon {
         }
         return points;
     }
+    Lines2DDyn Lines() const { return {}; }
 };
 
 struct Circle {
@@ -152,12 +154,19 @@ struct Circle {
     // Должны быть сделана по аналогии с RegularPolygon::Vertices
     //
     std::vector<Point2D> Vertices(size_t N = 30) { return {}; }
-    Lines2DDyn Lines(size_t N = 100) { return {}; }
+    Lines2DDyn Lines(size_t N = 100) const { return {}; }
 };
 
 class Polygon {
 public:
     /* ваш код здесь */
+
+    //
+    // Должны быть сделана по аналогии с RegularPolygon::Vertices
+    //
+    Point2D Center() { return {}; }
+    std::vector<Point2D> Vertices(size_t N = 30) const { return {}; }
+    Lines2DDyn Lines(size_t N = 100) const { return {}; }
 
 private:
     std::vector<Point2D> points_;
@@ -171,14 +180,22 @@ enum class GeometryError { Unsupported, NoIntersection, InvalidInput, DegenrateC
 template <typename T>
 using GeometryResult = std::expected<T, GeometryError>;
 
+/*
+ * В коде везде используется ReplaceMe. Ваша задача - удалить ReplaceMe и везде вместо него
+ использовать наиболее подходящий тип для решения задачи
+ */
+struct ReplaceMe {
+    ReplaceMe(std::vector<Shape>) {}
+};
+
 }  // namespace geometry
 
 template <>
 struct std::formatter<geometry::Point2D> {
-    constexpr auto parse(std::format_parse_context &ctx) { return ctx.begin(); }
+    constexpr auto parse(std::format_parse_context &ctx) const { return ctx.begin(); }
 
     template <typename FormatContext>
-    auto format(const geometry::Point2D &p, FormatContext &ctx) {
+    auto format(const geometry::Point2D &p, FormatContext &ctx) const {
         return format_to(ctx.out(), "({:.2f}, {:.2f})", p.x, p.y);
     }
 };
@@ -186,7 +203,7 @@ template <>
 struct std::formatter<std::vector<geometry::Point2D>> {
     bool use_new_line = false;
 
-    constexpr auto parse(std::format_parse_context &ctx) {
+    constexpr auto parse(std::format_parse_context &ctx) const {
         auto it = ctx.begin();
 
         /* ваш код здесь */
@@ -195,7 +212,7 @@ struct std::formatter<std::vector<geometry::Point2D>> {
     }
 
     template <typename FormatContext>
-    auto format(const std::vector<geometry::Point2D> &v, FormatContext &ctx) {
+    auto format(const std::vector<geometry::Point2D> &v, FormatContext &ctx) const {
 
         /* ваш код здесь */
         return ctx.out();
@@ -204,30 +221,30 @@ struct std::formatter<std::vector<geometry::Point2D>> {
 
 template <>
 struct std::formatter<geometry::Line> {
-    constexpr auto parse(std::format_parse_context &ctx) { return ctx.begin(); }
+    constexpr auto parse(std::format_parse_context &ctx) const { return ctx.begin(); }
 
     template <typename FormatContext>
-    auto format(const geometry::Line &l, FormatContext &ctx) {
+    auto format(const geometry::Line &l, FormatContext &ctx) const {
         return std::format_to(ctx.out(), "Line({}, {})", l.start, l.end);
     }
 };
 
 template <>
 struct std::formatter<geometry::Circle> {
-    constexpr auto parse(std::format_parse_context &ctx) { return ctx.begin(); }
+    constexpr auto parse(std::format_parse_context &ctx) const { return ctx.begin(); }
 
     template <typename FormatContext>
-    auto format(const geometry::Circle &c, FormatContext &ctx) {
+    auto format(const geometry::Circle &c, FormatContext &ctx) const {
         return std::format_to(ctx.out(), "Circle(center={}, r={:.2f})", c.center_p, c.radius);
     }
 };
 
 template <>
 struct std::formatter<geometry::Rectangle> {
-    constexpr auto parse(std::format_parse_context &ctx) { return ctx.begin(); }
+    constexpr auto parse(std::format_parse_context &ctx) const { return ctx.begin(); }
 
     template <typename FormatContext>
-    auto format(const geometry::Rectangle &r, FormatContext &ctx) {
+    auto format(const geometry::Rectangle &r, FormatContext &ctx) const {
         return std::format_to(ctx.out(), "Rectangle(bottom_left={}, w={:.2f}, h={:.2f})", r.bottom_left, r.width,
                               r.height);
     }
@@ -235,29 +252,29 @@ struct std::formatter<geometry::Rectangle> {
 
 template <>
 struct std::formatter<geometry::RegularPolygon> {
-    constexpr auto parse(std::format_parse_context &ctx) { return ctx.begin(); }
+    constexpr auto parse(std::format_parse_context &ctx) const { return ctx.begin(); }
 
     template <typename FormatContext>
-    auto format(const geometry::RegularPolygon &p, FormatContext &ctx) {
+    auto format(const geometry::RegularPolygon &p, FormatContext &ctx) const {
         return std::format_to(ctx.out(), "RegularPolygon(center={}, r={:.2f}, sides={})", p.center_p, p.radius,
                               p.sides);
     }
 };
 template <>
 struct std::formatter<geometry::Triangle> {
-    constexpr auto parse(std::format_parse_context &ctx) { return ctx.begin(); }
+    constexpr auto parse(std::format_parse_context &ctx) const { return ctx.begin(); }
 
     template <typename FormatContext>
-    auto format(const geometry::Triangle &t, FormatContext &ctx) {
+    auto format(const geometry::Triangle &t, FormatContext &ctx) const {
         return std::format_to(ctx.out(), "Triangle({}, {}, {})", t.a, t.b, t.c);
     }
 };
 template <>
 struct std::formatter<geometry::Polygon> {
-    constexpr auto parse(std::format_parse_context &ctx) { return ctx.begin(); }
+    constexpr auto parse(std::format_parse_context &ctx) const { return ctx.begin(); }
 
     template <typename FormatContext>
-    auto format(const geometry::Polygon &poly, FormatContext &ctx) {
+    auto format(const geometry::Polygon &poly, FormatContext &ctx) const {
         auto out = ctx.out();
         out = std::format_to(out, "Polygon[{} points]: [", poly.Vertices().size());
 

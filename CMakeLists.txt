@@ -7,9 +7,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    # Все предупреждения - это ошибки
-    add_compile_options(-Wfatal-errors -Wall -Werror -Wno-deprecated-declarations)
-
     # Не больше одной ошибки за раз
     add_compile_options(-fmax-errors=1)
 endif()
@@ -41,11 +38,9 @@ add_library(${PROJECT_NAME}_imp STATIC "${CMAKE_SOURCE_DIR}/src/main.cpp" ${SRC_
 # Добавляем в проект используемые сторонние библиотеки
 target_include_directories(${PROJECT_NAME}_imp PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${OPENSSL_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
     ${matplotplusplus_SOURCE_DIR}/source
 )
-target_link_libraries(${PROJECT_NAME}_imp PRIVATE ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} matplot)
+target_link_libraries(${PROJECT_NAME}_imp PRIVATE matplot)
 
 # Создаём исполняемый таргет и линкуем к нему статическую библиотеку
 add_executable(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/src/main.cpp")

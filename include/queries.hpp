@@ -32,6 +32,8 @@ struct PointToShapeDistanceVisitor {
  *    - Line   & Line
  *    - Circle & Circle
  *
+ * Важно: вы можете выбрать любой метод нахождения расстояния, даже если он даёт не точный результат
+ *
  * Для всех остальных требуется вернуть пустое значение
  */
 struct ShapeToShapeDistanceVisitor {
